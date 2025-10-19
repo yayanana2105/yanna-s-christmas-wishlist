@@ -41,21 +41,21 @@
 
   /* Titre cursif rouge */
   .intro .title {
-    font-family: "Alex Brush", cursive;
-    color: #c1121f; /* rouge élégant */
-    font-size: clamp(36px, 7vw, 72px);
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    animation: titleIn .9s ease forwards .4s;
-    user-select: none;
-   /* nouvelle ligne pour centrer */
+  font-family: "Alex Brush", cursive;
+  color: #c1121f; /* rouge élégant */
+  font-size: clamp(36px, 7vw, 72px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: titleIn .9s ease forwards .4s;
+  user-select: none;
+  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
   @keyframes titleIn {
