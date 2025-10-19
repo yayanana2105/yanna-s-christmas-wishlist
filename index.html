@@ -26,19 +26,32 @@
     overflow: hidden;
   }
 
-  /* Effet enveloppe (arrière avec rabat triangulaire) */
-  body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    z-index: -1;
+ /* Effet enveloppe avec animation de fermeture */
+body::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: #fff;
+  clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: -1;
+  animation: fold 2s ease forwards;
+}
+
+/* Animation du rabat */
+@keyframes fold {
+  0% {
+    transform: rotateX(0deg);
+    transform-origin: top;
   }
+  100% {
+    transform: rotateX(180deg);
+    transform-origin: top;
+  }
+}
 
   /* Texte rouge cursif centré */
   h1 {
