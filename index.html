@@ -1,6 +1,136 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Police cursive + styles de l'intro -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  /* Overlay plein écran */
+  .intro {
+    position: fixed; inset: 0; z-index: 9999;
+    display: grid; place-items: center;
+    background: #fff;
+    overflow: hidden;
+  }
+  /* Papier à grain : texture légère via gradients superposés */
+  .intro .paper {
+    width: min(86vw, 780px); height: min(60vw, 520px);
+    background: #fff;
+    border-radius: 10px; border: 1px solid #e5e7eb;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    /* grain subtil */
+    background-image:
+      radial-gradient(rgba(0,0,0,.025) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,.02) 1px, transparent 1px),
+      linear-gradient(#fff,#fefefe);
+    background-size: 3px 3px, 5px 5px, 100% 100%;
+    background-position: 0 0, 1px 2px, 0 0;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  /* Titre cursif rouge */
+  .intro .title {
+    font-family: "Great Vibes", cursive;
+    color: #c1121f; /* rouge élégant */
+    font-size: clamp(36px, 7vw, 72px);
+    text-align: center;
+    transform: translateY(10px);
+    opacity: 0;
+    animation: titleIn .9s ease forwards .4s;
+    user-select: none;
+  }
+  @keyframes titleIn {
+    from { opacity:0; transform: translateY(22px) scale(.98); }
+    to   { opacity:1; transform: translateY(10px) scale(1); }
+  }
+
+  /* ENVELOPPE (dos) */
+  .intro .envelope {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    transform: rotateY(180deg); /* cachée côté verso du papier */
+    backface-visibility: hidden;
+  }
+  /* corps de l’enveloppe */
+  .env-body {
+    position: relative;
+    width: 100%; height: 100%;
+    border-radius: 10px;
+    background: #faf7f1;
+    border: 1px solid #eadfcd;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.02);
+  }
+  /* rabat triangulaire */
+  .env-flap {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 52%;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    background: #f2e9da;
+    border-bottom: 1px solid #e0d5c2;
+    transform-origin: top center;
+    transition: transform .8s cubic-bezier(.22,1,.36,1);
+  }
+  /* sticker “gui” */
+  .sticker {
+    position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%);
+    width: 66px; height: 66px; border-radius: 50%;
+    background: #fff; border: 2px solid #c7e6d1;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    display: grid; place-items: center;
+  }
+  .sticker svg { width: 38px; height: 38px; }
+
+  /* “Press to open” */
+  .press {
+    position: absolute; top: calc(46% + 48px); left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px; letter-spacing: .08em;
+    color: #7c8a97;
+    background: #fff; border: 1px dashed #cbd5e1; padding: 6px 10px;
+    border-radius: 999px; cursor: pointer; user-select: none;
+    transition: transform .15s ease, background .2s ease;
+  }
+  .press:hover { transform: translateX(-50%) scale(1.04); background:#f8fafc; }
+
+  /* FEUILLE qui sort */
+  .letter {
+    position: absolute; left: 50%; top: 55%;
+    transform: translate(-50%,-50%);
+    width: 90%; height: 90%; background: #fff;
+    border: 1px solid #e5e7eb; border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    opacity: 0; pointer-events: none;
+    transition: transform .9s cubic-bezier(.22,1,.36,1), opacity .4s ease;
+  }
+
+  /* FLIP du papier vers l’enveloppe */
+  .intro.flip .paper { animation: flipPaper 1s ease forwards 1.6s; }
+  @keyframes flipPaper {
+    to { transform: rotateY(180deg); }
+  }
+
+  /* ouverture du rabat */
+  .intro.open .env-flap { transform: rotateX(-160deg); }
+
+  /* lettre qui sort (plein écran) */
+  .intro.open .letter {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.08);
+  }
+  .intro.dismiss {
+    animation: fadeOut .7s ease forwards .5s;
+  }
+  @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+  /* masque en arrière-plan pour assombrir un peu pendant l’intro */
+  .intro::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,.05), transparent 60%);
+  }
+</style>
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Wishlist de Noël</title>
@@ -43,6 +173,33 @@
 </style>
 </head>
 <body>
+  <body>
+  <!-- INTRO OVERLAY -->
+  <div class="intro" id="intro">
+    <div class="paper" id="paper">
+      <div class="title">Yanna's Christmas Wishlist</div>
+      <div class="envelope">
+        <div class="env-body">
+          <div class="env-flap" id="flap"></div>
+          <div class="sticker" id="sticker" title="press to open">
+            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <circle cx="22" cy="30" r="4" fill="#2f9e44"/>
+              <circle cx="32" cy="22" r="4" fill="#2f9e44"/>
+              <circle cx="40" cy="30" r="4" fill="#2f9e44"/>
+              <path d="M32 22 C28 28, 28 36, 22 34" stroke="#2f9e44" stroke-width="3" stroke-linecap="round"/>
+              <path d="M32 22 C36 28, 36 36, 40 34" stroke="#2f9e44" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="24" cy="40" r="2.6" fill="#e11d48"/>
+              <circle cx="32" cy="40" r="2.6" fill="#e11d48"/>
+              <circle cx="40" cy="40" r="2.6" fill="#e11d48"/>
+            </svg>
+          </div>
+          <div class="press" id="press">press to open</div>
+          <div class="letter" id="letter" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /INTRO OVERLAY -->
 <header>
   <div class="wrap">
     <div class="title">
