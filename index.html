@@ -34,6 +34,11 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
+
+      /* recentre mieux le texte malgré le rabat */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     /* Rabat triangulaire (dos d’enveloppe) */
@@ -41,16 +46,13 @@
       position: absolute;
       inset: 0;
       background: #fff;
-      /* triangle en haut + rectangle : dos d'enveloppe */
       clip-path: polygon(0 0, 50% 42%, 100% 0, 100% 100%, 0 100%);
       box-shadow: 0 8px 20px rgba(0,0,0,.10);
       transform-origin: top;
       backface-visibility: hidden;
-
-      /* démarre relevé, se “referme” vers la page */
       transform: rotateX(-110deg);
       animation: fold 3s cubic-bezier(.22,1,.36,1) forwards;
-      z-index: 0; /* derrière le texte pour qu’on garde le titre visible */
+      z-index: 0;
     }
 
     @keyframes fold {
@@ -60,25 +62,25 @@
     /* Texte rouge cursif centré */
     h1 {
       position: relative;
-      z-index: 1;              /* au-dessus du rabat */
+      z-index: 1;
       font-family: 'Alex Brush', cursive;
       color: #c1121f;
       font-size: clamp(60px, 10vw, 150px);
       margin: 0;
       text-align: center;
       line-height: 1.1;
-      /* petite entrée douce */
+
+      /* légère remontée pour compensation visuelle */
+      transform: translateY(-5%);
       animation: titleIn .9s ease-out both .2s;
     }
 
     @keyframes titleIn {
-      from { opacity: 0; transform: translateY(8px) scale(.98); }
-      to   { opacity: 1; transform: translateY(0)  scale(1); }
+      from { opacity: 0; transform: translateY(10%) scale(.98); }
+      to   { opacity: 1; transform: translateY(-5%) scale(1); }
     }
 
-    /* Reset body pour enlever marges par défaut (utile si copié/collé brut) */
-    html, body { height: 100%; }
-    body { margin: 0; }
+    html, body { height: 100%; margin: 0; }
   </style>
 </head>
 
