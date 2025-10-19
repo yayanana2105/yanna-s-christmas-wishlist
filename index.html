@@ -42,7 +42,11 @@
     opacity: 0;
     animation: titleIn .9s ease forwards .4s;
     user-select: none;
-  }
+   /* nouvelle ligne pour centrer */
+  display: flex;
+  justify-content: center;
+}
+
   @keyframes titleIn {
     from { opacity:0; transform: translateY(22px) scale(.98); }
     to   { opacity:1; transform: translateY(10px) scale(1); }
