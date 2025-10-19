@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Feuille à grain</title>
+  <title>Feuille à grain - Yanna</title>
+
+  <!-- Police cursive -->
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 
   <style>
     /* Feuille blanche à grain */
@@ -11,16 +14,27 @@
       margin: 0;
       height: 100vh;
       background-color: #fff;
-      /* motif grain léger */
       background-image:
         radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
         radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
       background-size: 3px 3px, 8px 8px;
       background-position: 0 0, 4px 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Texte rouge cursif centré */
+    h1 {
+      font-family: 'Alex Brush', cursive;
+      color: #c1121f;
+      font-size: clamp(60px, 10vw, 120px);
+      margin: 0;
     }
   </style>
 </head>
 
 <body>
+  <h1>Yanna</h1>
 </body>
 </html>
