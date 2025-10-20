@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yanna's Christmas Wishlist</title>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
+
   <style>
     body {
       display: flex;
@@ -23,11 +24,12 @@
 
     .envelope {
       position: relative;
-      width: 300px;
-      height: 200px;
+      width: 60vw; /* largeur augmentée */
+      height: 70vh; /* hauteur augmentée */
       transform-style: preserve-3d;
       transform: rotateY(0deg);
-      transition: transform 1s;
+      transition: transform 1.2s ease-in-out;
+      cursor: pointer;
     }
 
     .envelope .front, .envelope .back {
@@ -35,49 +37,56 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     }
 
     .envelope .front {
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #fff;
     }
 
     .envelope .front h1 {
       font-family: 'Alex Brush', cursive;
       color: #c1121f;
-      font-size: 2em;
+      font-size: clamp(48px, 7vw, 120px);
+      text-align: center;
+      line-height: 1.1;
+      margin: 0;
     }
 
     .envelope .back {
-      background-color: #fff;
       transform: rotateY(180deg);
       display: flex;
       justify-content: center;
       align-items: center;
+      background-color: #fff;
+      font-size: 3em;
     }
 
+    /* 🌿 petit emoji gui au dos */
     .envelope .back::before {
-      content: '📎'; /* Ici on mettra un petit gui stylisé */
-      font-size: 2em;
+      content: '🌿'; /* on remplace 📎 par gui */
+      font-size: 3.5em;
     }
 
-    /* Au survol ou au clic, on retourne */
-    .envelope:hover {
+    /* Effet de rotation au clic */
+    .envelope.flipped {
       transform: rotateY(180deg);
     }
   </style>
 </head>
 <body>
-  <div class="envelope">
+
+  <div class="envelope" onclick="this.classList.toggle('flipped')">
     <div class="front">
-      <h1>Yanna's Christmas Wishlist</h1>
+      <h1>Yanna's Christmas<br>Wishlist</h1>
     </div>
-    <div class="back">
-      <!-- Ici, le dos de l’enveloppe avec un petit autocollant de gui -->
-      <!-- On pourrait mettre un petit SVG de gui ici si tu veux -->
-    </div>
+    <div class="back"></div>
   </div>
+
 </body>
 </html>
+
