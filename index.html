@@ -1,92 +1,169 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yanna's Christmas Wishlist</title>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 
   <style>
+    /* reset mini pour éviter les styles résiduels */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+
+    /* papier à grain (fond de page) */
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #fff;
+      display: grid;
+      place-items: center;
+      background: #fff;
       background-image:
-        radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-        radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+        radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px),
+        radial-gradient(rgba(0,0,0,.02) 1px, transparent 1px);
       background-size: 3px 3px, 8px 8px;
       background-position: 0 0, 4px 4px;
-      perspective: 1200px;
+      perspective: 1200px; /* pour la rotation 3D */
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     }
 
+    /* scène = enveloppe cliquable */
     .envelope {
+      width: min(60vw, 960px);
+      height: min(70vh, 700px);
+      min-width: 320px;
+      min-height: 240px;
       position: relative;
-      width: 60vw; /* largeur augmentée */
-      height: 70vh; /* hauteur augmentée */
       transform-style: preserve-3d;
-      transform: rotateY(0deg);
-      transition: transform 1.2s ease-in-out;
+      transition: transform 1.1s ease-in-out;
       cursor: pointer;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
     }
 
-    .envelope .front, .envelope .back {
+    /* faces */
+    .face {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       backface-visibility: hidden;
-      border-radius: 8px;
-      background-color: #fff;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      background: #fff;
+      /* grain aussi sur l’enveloppe */
+      background-image:
+        radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px),
+        radial-gradient(rgba(0,0,0,.02) 1px, transparent 1px);
+      background-size: 3px 3px, 8px 8px;
+      background-position: 0 0, 4px 4px;
+      display: grid;
+      place-items: center;
     }
 
-    .envelope .front {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .envelope .front h1 {
+    /* recto : titre rouge */
+    .front h1{
       font-family: 'Alex Brush', cursive;
       color: #c1121f;
-      font-size: clamp(48px, 7vw, 120px);
+      font-size: clamp(40px, 7vw, 120px);
+      line-height: 1.08;
       text-align: center;
-      line-height: 1.1;
       margin: 0;
+      padding: 0 4vw;
     }
 
-    .envelope .back {
+    /* verso : dos d’enveloppe */
+    .back {
       transform: rotateY(180deg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
-      font-size: 3em;
+      background: #fff;
     }
 
-    /* 🌿 petit emoji gui au dos */
-    .envelope .back::before {
-      content: '🌿'; /* on remplace 📎 par gui */
-      font-size: 3.5em;
+    /* rabat triangulaire */
+    .back::before{
+      content:"";
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 56%;
+      background: #fff;
+      /* triangle : bords vers le centre */
+      clip-path: polygon(0 0, 100% 0, 50% 68%);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
     }
 
-    /* Effet de rotation au clic */
-    .envelope.flipped {
+    /* petit sticker rond + gui */
+    .sticker{
+      position: absolute;
+      left: 50%; top: 38%;
+      transform: translate(-50%, -50%);
+      width: clamp(36px, 7vw, 72px);
+      height: clamp(36px, 7vw, 72px);
+      border-radius: 999px;
+      background: #fff;
+      border: 2px solid #c7d2cf;
+      box-shadow: 0 4px 10px rgba(0,0,0,.10);
+      display: grid;
+      place-items: center;
+    }
+    .sticker svg{
+      width: 70%; height: 70%;
+    }
+
+    /* ligne "Press to open" (optionnel) */
+    .press{
+      position: absolute;
+      top: calc(38% + clamp(36px, 7vw, 72px) / 2 + 16px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px dashed #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      color: #788;
+      user-select: none;
+    }
+
+    /* flip au clic (classe ajoutée par JS inline) */
+    .envelope.flipped{
       transform: rotateY(180deg);
+    }
+
+    /* accessibilité focus */
+    .envelope:focus-visible{
+      outline: 3px solid #94a3b8;
+      outline-offset: 6px;
+    }
+
+    /* petit confort mobile */
+    @media (max-width: 520px){
+      .press{ font-size: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="envelope" onclick="this.classList.toggle('flipped')">
-    <div class="front">
+  <!-- CLIQUE ICI pour retourner -->
+  <div class="envelope" role="button" aria-label="Retourner l'enveloppe"
+       tabindex="0"
+       onclick="this.classList.toggle('flipped')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){this.classList.toggle('flipped'); event.preventDefault();}">
+    <!-- recto -->
+    <div class="face front">
       <h1>Yanna's Christmas<br>Wishlist</h1>
     </div>
-    <div class="back"></div>
+
+    <!-- verso -->
+    <div class="face back">
+      <div class="sticker" aria-hidden="true">
+        <!-- petit gui en SVG -->
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+            <path d="M32 34 C32 20, 44 18, 50 12" stroke="#1b7f5d"/>
+            <path d="M32 34 C32 20, 20 18, 14 12" stroke="#1b7f5d"/>
+            <circle cx="24" cy="40" r="3.5" fill="#e11d48" stroke="#b91c1c"/>
+            <circle cx="32" cy="44" r="3.5" fill="#e11d48" stroke="#b91c1c"/>
+            <circle cx="40" cy="40" r="3.5" fill="#e11d48" stroke="#b91c1c"/>
+          </g>
+        </svg>
+      </div>
+      <div class="press">Press to open</div>
+    </div>
   </div>
 
 </body>
 </html>
-
